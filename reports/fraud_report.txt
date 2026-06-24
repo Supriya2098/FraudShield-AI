@@ -1,0 +1,5 @@
+FraudShield AI Report
+========================================
+Total Transactions: 100
+Fraud Transactions: 3
+Fraud Rate: 3.00%
