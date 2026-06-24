@@ -56,7 +56,18 @@ color:#00E5FF !important;
 
 @st.cache_data
 def load_data():
-    return pd.read_csv("../data/processed/feature_engineered_transactions.csv")
+   
+
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    DATA_PATH = os.path.join(
+        BASE_DIR,
+        "data",
+        "processed",
+        "feature_engineered_transactions.csv"
+    )
+
+    return pd.read_csv(DATA_PATH)
 
 def metric_card(title,value):
     st.markdown(f"""
