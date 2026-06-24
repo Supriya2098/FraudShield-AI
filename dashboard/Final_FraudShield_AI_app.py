@@ -35,18 +35,24 @@ background:#0A192F;
 color:#CCD6F6;
 }
 
-section[data-testid="stSidebar"] *{
+section[data-testid="stSidebar"]{
+    background:#112240;
+}
+
+section[data-testid="stSidebar"] h1{
+    color:#00E5FF !important;
+}
+label[data-testid="stWidgetLabel"] p{
     color:white !important;
+    font-weight:600 !important;
 }
 div[role="radiogroup"] label{
     color:white !important;
     font-size:16px !important;
+    font-weight:600 !important;
 }
 
-section[data-testid="stSidebar"] label{
-    color:white !important;
-    font-weight:600;
-}
+
 
 .metric-card{
 background:linear-gradient(135deg,#112240,#1A365D);
