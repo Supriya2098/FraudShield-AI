@@ -71,7 +71,7 @@ df = load_data()
 st.sidebar.title("🛡️ FraudShield AI")
 if os.path.exists("../assets/logo.png"):
     st.sidebar.image(
-        "../assets/logo.png",
+        "../assets/logo.jpeg",
         width=180
     )
 
