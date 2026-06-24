@@ -12,6 +12,12 @@ sys.path.append(
         )
     )
 )
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
+)
+
 
 sys.path.append("..")
 from src.predict import FraudPredictor
@@ -29,8 +35,17 @@ background:#0A192F;
 color:#CCD6F6;
 }
 
-section[data-testid="stSidebar"]{
-background:#112240;
+section[data-testid="stSidebar"] *{
+    color:white !important;
+}
+div[role="radiogroup"] label{
+    color:white !important;
+    font-size:16px !important;
+}
+
+section[data-testid="stSidebar"] label{
+    color:white !important;
+    font-weight:600;
 }
 
 .metric-card{
@@ -44,8 +59,8 @@ box-shadow:0 4px 20px rgba(0,229,255,0.15);
 }
 
 .metric-card:hover{
-transform:translateY(-6px);
-box-shadow:0 10px 30px rgba(0,229,255,0.35);
+    transform:translateY(-8px);
+    box-shadow:0 10px 30px rgba(0,229,255,0.35);
 }
 
 h1,h2,h3,h4{
@@ -58,7 +73,7 @@ color:#00E5FF !important;
 def load_data():
    
 
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
 
     DATA_PATH = os.path.join(
         BASE_DIR,
@@ -89,7 +104,7 @@ def style_plot(fig):
 df = load_data()
 
 st.sidebar.title("🛡️ FraudShield AI")
-if os.path.exists("../assets/logo.png"):
+if os.path.exists("../assets/logo.jpeg"):
     st.sidebar.image(
         "../assets/logo.jpeg",
         width=180
@@ -97,13 +112,17 @@ if os.path.exists("../assets/logo.png"):
 
 
 
-country_filter = st.sidebar.multiselect(
-    "Country Filter",
-    sorted(df["country"].unique()),
-    default=sorted(df["country"].unique())
+selected_country = st.sidebar.selectbox(
+    "🌍 Select Country",
+    ["All Countries"] + sorted(df["country"].unique())
 )
 
-filtered_df = df[df["country"].isin(country_filter)]
+if selected_country != "All Countries":
+    filtered_df = df[df["country"] == selected_country]
+else:
+    filtered_df = df.copy()
+
+
 
 menu = st.sidebar.radio(
     "Navigation",
@@ -124,8 +143,19 @@ if menu == "Dashboard":
     color:white;
     margin-bottom:25px;
     ">
-    <h1>🛡️ FraudShield AI</h1>
-    <h3>Enterprise Fraud Intelligence Platform</h3>
+    <h1 style="
+    color:white;
+    text-shadow:0px 2px 8px rgba(0,0,0,0.3);
+    ">
+    🛡️ FraudShield AI
+    </h1>
+
+    <h3 style="
+    color:white;
+    text-shadow:0px 2px 8px rgba(0,0,0,0.3);
+    ">
+    Enterprise Fraud Intelligence Platform
+    </h3>
     </div>
     """, unsafe_allow_html=True)
     st.title("🛡️ FraudShield AI")
@@ -307,7 +337,14 @@ elif menu == "Batch Prediction":
 
     if uploaded_file is not None:
         upload_df = pd.read_csv(uploaded_file)
-        predictor = FraudPredictor("../models/random_forest.pkl")
+        MODEL_PATH = os.path.join(
+            BASE_DIR,
+            "models",
+            "random_forest.pkl"
+        )
+
+        predictor = FraudPredictor(MODEL_PATH)
+        
         results = predictor.batch_predict(upload_df)
 
         st.dataframe(results, use_container_width=True)
