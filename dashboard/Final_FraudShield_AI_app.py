@@ -46,11 +46,15 @@ label[data-testid="stWidgetLabel"] p{
     color:white !important;
     font-weight:600 !important;
 }
-div[role="radiogroup"] label{
+.stRadio label{
     color:white !important;
-    font-size:16px !important;
-    font-weight:600 !important;
 }
+
+.stRadio label p{
+    color:white !important;
+    opacity:1 !important;
+}
+
 
 
 
@@ -109,12 +113,13 @@ def style_plot(fig):
 
 df = load_data()
 
-st.sidebar.title("🛡️ FraudShield AI")
+
 if os.path.exists("../assets/logo.jpeg"):
     st.sidebar.image(
         "../assets/logo.jpeg",
         width=180
     )
+st.sidebar.title("🛡️ FraudShield AI")    
 
 
 
