@@ -17,6 +17,10 @@ BASE_DIR = os.path.dirname(
         os.path.abspath(__file__)
     )
 )
+REPORTS_DIR = os.path.join(
+    BASE_DIR,
+    "reports"
+)
 
 
 sys.path.append("..")
@@ -58,6 +62,7 @@ label[data-testid="stWidgetLabel"] p{
 
 
 
+
 .metric-card{
 background:linear-gradient(135deg,#112240,#1A365D);
 padding:20px;
@@ -71,6 +76,17 @@ box-shadow:0 4px 20px rgba(0,229,255,0.15);
 .metric-card:hover{
     transform:translateY(-8px);
     box-shadow:0 10px 30px rgba(0,229,255,0.35);
+}
+[data-testid="stMetricValue"]{
+    color:white !important;
+    font-size:40px !important;
+    font-weight:bold !important;
+}
+
+[data-testid="stMetricLabel"]{
+    color:#00E5FF !important;
+    font-size:18px !important;
+    font-weight:600 !important;
 }
 
 h1,h2,h3,h4{
@@ -343,8 +359,23 @@ elif menu == "Live Prediction":
 
 elif menu == "Batch Prediction":
     st.title("📂 Batch Prediction")
+    st.info("""
+    Upload a CSV containing transaction records.
+    The model will predict fraud probability
+    for each transaction.
+    """)
+    st.markdown("""
+    ### How It Works
 
-    uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
+    1. Upload transaction CSV
+    2. Model predicts fraud probability
+    3. Download prediction report
+    """)
+
+
+    uploaded_file = st.file_uploader(
+        "Upload CSV",
+         type=["csv"])
 
     if uploaded_file is not None:
         upload_df = pd.read_csv(uploaded_file)
@@ -374,24 +405,35 @@ elif menu == "Explainable AI":
     )
 
     with tab1:
-        if os.path.exists("../reports/feature_importance.png"):
-            st.image("../reports/feature_importance.png", use_container_width=True)
-
+        st.image(
+            os.path.join(
+                REPORTS_DIR,
+                "feature_importance.png"
+            )
+        )
     with tab2:
-        if os.path.exists("../reports/shap_summary_fixed.png"):
-            st.image("../reports/shap_summary_fixed.png", use_container_width=True)
-
+        st.image(
+            os.path.join(
+                REPORTS_DIR,
+                "shap_summary_fixed.png"
+            )
+    )
+        
     with tab3:
-        if os.path.exists("../reports/shap_bar_fixed.png"):
-            st.image("../reports/shap_bar_fixed.png", use_container_width=True)
-
+        st.image(
+            os.path.join(
+                REPORTS_DIR,
+                "shap_bar_fixed.png"
+            )
+    )
+        
 elif menu == "Reports":
     st.title("📄 Reports")
 
     for file in [
-        "../reports/fraud_summary.csv",
-        "../reports/fraud_predictions.csv",
-        "../reports/top_fraud_cases.csv"
+    os.path.join(REPORTS_DIR,"fraud_summary.csv"),
+    os.path.join(REPORTS_DIR,"fraud_predictions.csv"),
+    os.path.join(REPORTS_DIR,"top_fraud_cases.csv")
     ]:
         if os.path.exists(file):
             st.markdown(f"### 📄 {os.path.basename(file)}")
@@ -414,15 +456,23 @@ elif menu == "About":
     st.metric("F1 Score","75.08%")
 
     st.markdown("""
-### Enterprise Fraud Detection Platform
+<div style="color:white;">
 
-Technologies:
-- Python
-- Pandas
-- Scikit-Learn
-- SHAP
-- Plotly
-- Streamlit
+<h2 style="color:#00E5FF;">
+Enterprise Fraud Detection Platform
+</h2>
 
-Developer: Supriya Kusuma
-""")
+<h4>Technologies:</h4>
+
+<ul>
+<li>Python</li>
+<li>Pandas</li>
+<li>Scikit-Learn</li>
+<li>SHAP</li>
+<li>Plotly</li>
+</ul>
+
+<b>Developer:</b> Supriya Kusuma
+
+</div>
+""", unsafe_allow_html=True)
